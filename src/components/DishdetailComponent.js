@@ -5,7 +5,8 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbIte
 import {Link} from 'react-router-dom';
 import {Control, LocalForm, Errors } from 'react-redux-form';
 
-
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
 
     function RenderDish({dish}) {
         console.log("DishDetail Component render is invoked");
@@ -130,7 +131,7 @@ import {Control, LocalForm, Errors } from 'react-redux-form';
 								<ModalBody>
 									<LocalForm onSubmit={(values) => this.handleSubmit(values)}>
 										<Row className="form-group">
-											<Label htmlFor="rating" md={2}>Rating</Label>
+											<Label htmlFor="rating">Rating</Label>
 											<Col md={12}>
 												<Control.select model=".rating" name="rating"
 												className="form-control">
@@ -148,16 +149,27 @@ import {Control, LocalForm, Errors } from 'react-redux-form';
 											</Col>
 										</Row>
 										<Row className="form-group">
-											<Label htmlFor="yourName" md={12}>Your Name</Label>
+											<Label htmlFor="yourName">Your Name</Label>
 											<Col md={12}>
 												<Control.text model=".yourName" id="yourName" name="yourName"
 												placeholder="Your Name"
-												className="form-control"
-												 />
+												className="form-control"     validators={{
+													minLength: minLength(2), maxLength: maxLength(15)
+												}}
+								         />
+												<Errors
+												className="text-danger"
+												model=".yourName"
+												show="touched"
+												messages={{
+													minLength: 'Must be greater than 2 characters',
+													maxLength: 'Must be 15 characters or less'
+												}}
+												/>
 											</Col>
 										</Row>
 										<Row className="form-group">
-											<Label htmlFor="comment" md={12}>Comment</Label>
+											<Label htmlFor="comment">Comment</Label>
 											<Col md={12}>
 												<Control.textarea model=".comment" id="comment" name="comment"
 													rows="5"
